@@ -147,9 +147,7 @@ console.log(truckers);
 console.log(deliveries);
 console.log(actors);
 
-shipp_price();
-
-
+Main(); 
 
 /* Exercise 1 - Euro-Volume */
 
@@ -273,5 +271,64 @@ for (var n_deliverie of deliveries)
 		console.log("Details : ");
 		console.log(n_deliverie.commission);
 		
+		get_Credit (n_deliverie.id,n_deliverie);
+		
     }
+}
+
+
+
+/*Exercice 5 */
+
+/*
+the shipper must pay the shipping price and the (optional) deductible reduction ok 
+the trucker receives the shipping price minus the commission
+the insurance receives its part of the commission ok 
+the Treasury receives its part of the tax commission ok 
+convargo receives its part of the commission, plus the deductible reduction ok 
+*/
+
+function get_Credit(Id,n_deliverie)
+{
+	//console.log("1");
+	for (var n_actor of actors)
+		{	//console.log(n_actor.rentalId);
+			if (n_actor.deliveryId == Id || n_actor.rentalId == Id) 
+				{
+					if (n_actor.payment.who = 'shipper') 
+						{
+							n_actor.payment.amount = n_deliverie.price;
+							//console.log("ici");
+						}
+					
+					if (n_actor.payment.who = 'owner') 
+						{
+							n_actor.payment.amount = n_deliverie.price - ( n_deliverie.price * 0.3 );
+							//console.log("ici");
+						}
+					
+					if (n_actor.payment.who = 'treasury') 
+						{
+							n_actor.payment.amount = n_deliverie.commission.treasury;
+							//console.log("ici");
+						}
+					
+					if (n_actor.payment.who = 'insurance') 
+						{
+							n_actor.payment.amount = n_deliverie.commission.insurance;
+							//console.log("ici");
+						}
+					if (n_actor.payment.who = 'convargo') 
+						{
+							n_actor.payment.amount = n_deliverie.commission.convargo;
+							//console.log("ici");
+						}
+				}
+		}
+}
+
+function Main ()
+{
+	shipp_price();
+	console.log(actors);
 }
