@@ -147,40 +147,27 @@ console.log(actors);
 
 shipp_price();
 
-//console.log(decrease(150,15));
 
-//dist_comp('f944a3ff-591b-4d5b-9b67-c7e08cba9791',100);
-//vol_comp('f944a3ff-591b-4d5b-9b67-c7e08cba9791',5);
 
 /* Exercise 1 - Euro-Volume */
 
 /*distance component: the number of kilometers multiplied by the trucker price per km */
-
-function dist_comp (Id, distance)
-{
-	for ( var n_truckers of truckers)
-		{
-			if ( n_truckers.id == Id)
-				{
-					return n_truckers.pricePerKm * distance; 
-				}
-		}
-	return 0;
-}
-
 /*volume component: the used volume multiplied by the trucker price per m3*/
-function vol_comp (Id, volume)
+// fonction qui calcule le prix comp 
+function price_comp (Id, distance, volume)
 {
-	for ( var n_truckers of truckers)
+	var vol =0;
+	var dist=0; 
+	for (var n_truckers of truckers)
 		{
 			if ( n_truckers.id == Id)
 				{
-					return n_truckers.pricePerVolume * volume; 
-				}
+					dist= n_truckers.pricePerKm * distance; 
+					vol = n_truckers.pricePerVolume * volume; 
+				}	
 		}
-	return 0; 
+	return vol + dist;
 }
-
 
 
 /*Exercise 2 - Send more, pay less*/
@@ -191,7 +178,7 @@ decreases by 50% after 25 m3
 */
 
 
-/*retourne le pri avec sa reduction en fonction du volume */
+/*retourne le prix avec sa reduction en fonction du volume */
 function decrease ( price, volume)
 {
 	  if ( volume >5 && volume <10)
@@ -212,24 +199,11 @@ function decrease ( price, volume)
 function shipp_price(){ 
 for (var n_deliverie of deliveries)
     {
-		var distance = dist_comp(n_deliverie.truckerId,n_deliverie.distance);	
-		//console.log(distance);
-		var volume = vol_comp(n_deliverie.truckerId,n_deliverie.volume)
-		//console.log(volume);
-		var n_price = distance + volume ; 
+		
+		var n_price = price_comp(n_deliverie.truckerId,n_deliverie.distance, n_deliverie.volume); 	
+		console.log("Comptant : "+n_price);
 		n_price = decrease(n_price,n_deliverie.volume)
+		console.log("Decrease : "+n_price);
 		n_deliverie.commission = (n_price + n_price*0,3);
-		console.log(n_price);
     }
 }
-/*
-Exercise 3 - Give me all your money
-Convargo take a 30% commission on the shipping price to cover their costs.
-*/
-
-
-/*
-insurance: half of commission
-the Treasury: 1€ by 500km range
-convargo: the rest
-*/
