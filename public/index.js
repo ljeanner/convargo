@@ -36,6 +36,7 @@ var deliveries = [{
   'price': 0,
   'commission': {
     'insurance': 0,
+	 'treasury' :0,
     'convargo': 0
   }
 }, {
@@ -64,6 +65,7 @@ var deliveries = [{
   'price': 0,
   'commission': {
     'insurance': 0,
+	'treasury' :0,
     'convargo': 0
   }
 }];
@@ -183,27 +185,68 @@ function decrease ( price, volume)
 {
 	  if ( volume >5 && volume <10)
             {
-               price =price -(price * 0,1);
+               price =price -(price * 0.1);
             }
         if ( volume >10 && volume <25)
             {
-                price = price -(price * 0,3);
+                price = price -(price * 0.3);
             }
         if ( volume >25)
             {
-                price = price-(price * 0,5);
+                price = price-(price * 0.5);
             } 
 	return price ; 
 }
+
+
+/*
+Exercise 3 - Give me all your money
+Convargo take a 30% commission on the shipping price to cover their costs.
+*/
+
+
+/*
+insurance: half of commission
+the Treasury: 1€ by 500km range
+convargo: the rest
+*/
+
+function get_comission (prix)
+{
+	return prix + (prix *0.3);
+}
+
+function get_treasury (distance)
+{
+	var i = 0; 
+	while ( distance >500)
+		{
+			distance = distance -500; 
+			i=i+1;
+		}
+	return i; 
+}
+
 
 function shipp_price(){ 
 for (var n_deliverie of deliveries)
     {
 		
 		var n_price = price_comp(n_deliverie.truckerId,n_deliverie.distance, n_deliverie.volume); 	
+		console.log(n_deliverie.id);
 		console.log("Comptant : "+n_price);
 		n_price = decrease(n_price,n_deliverie.volume)
 		console.log("Decrease : "+n_price);
-		n_deliverie.commission = (n_price + n_price*0,3);
+		
+		n_deliverie.commission.treasury =get_treasury(n_deliverie.distance);
+		n_deliverie.commission.insurance = (n_price*0.3)/2;
+		n_deliverie.commission.convargo = n_deliverie.commission.insurance - n_deliverie.commission.treasury;
+		
+		n_price = get_comission(n_price);
+		n_deliverie.price=n_price;
+		console.log("TTC : "+n_price);
+		console.log("Details : ");
+		console.log(n_deliverie.commission);
+		
     }
 }
