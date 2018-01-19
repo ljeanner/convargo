@@ -227,22 +227,47 @@ function get_treasury (distance)
 	return i; 
 }
 
+/*Exercice 4 - The famous deductible */
+
+
+/*The shipper can reduce the deductible amount from 1000€ to 200€ with a deductible option for a few more euros per volume.
+The deductible
+The driver is charged an additional 1€/m3 when he chooses the deductible reduction option.*/
+
+
+function is_deductible (option, prix, volume)
+{
+	if (option == true)
+		{
+			return  prix + volume;
+		}
+	else {
+		return prix; 
+	}
+}
 
 function shipp_price(){ 
 for (var n_deliverie of deliveries)
     {
-		
+		//calcul du prix 
 		var n_price = price_comp(n_deliverie.truckerId,n_deliverie.distance, n_deliverie.volume); 	
 		console.log(n_deliverie.id);
 		console.log("Comptant : "+n_price);
 		n_price = decrease(n_price,n_deliverie.volume)
 		console.log("Decrease : "+n_price);
 		
+		// deductible
+		n_price = is_deductible(n_deliverie.options.deductibleReduction, n_price,n_deliverie.volume);
+		console.log("deductible : " + n_deliverie.options.deductibleReduction);
+		console.log("new price :" +n_price);
+		
+		// commission 
 		n_deliverie.commission.treasury =get_treasury(n_deliverie.distance);
 		n_deliverie.commission.insurance = (n_price*0.3)/2;
 		n_deliverie.commission.convargo = n_deliverie.commission.insurance - n_deliverie.commission.treasury;
-		
 		n_price = get_comission(n_price);
+		
+		//prix finaux
 		n_deliverie.price=n_price;
 		console.log("TTC : "+n_price);
 		console.log("Details : ");
